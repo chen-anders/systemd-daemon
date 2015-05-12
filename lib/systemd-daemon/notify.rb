@@ -14,8 +14,12 @@ module SystemdDaemon
       _sd_watchdog_enabled(unset_env_value(unset_env))
     end
 
+    def watchdog_ping
+      notify(false, WATCHDOG: 1)
+    end
+
     def watchdog?
-      !!watchdog_timer
+      !! watchdog_timer
     end
 
     private

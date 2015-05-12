@@ -25,8 +25,14 @@ class TestSystemdDaemonNotify < Test::Unit::TestCase
   end
 
   def test_ready
-    assert with_socket('READY=1') {
+    assert_socket('READY=1') {
       SystemdDaemon::Notify.ready
+    }
+  end
+
+  def test_watchdog_ping
+    assert_socket('WATCHDOG=1') {
+      SystemdDaemon::Notify.watchdog_ping
     }
   end
 
