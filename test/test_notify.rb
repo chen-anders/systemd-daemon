@@ -13,6 +13,7 @@ class TestSystemdDaemonNotify < Test::Unit::TestCase
 
     assert_equal expected_data, s.recvmsg[0], msg
   ensure
+    ENV.delete 'NOTIFY_SOCKET'
     s.close
   end
 
@@ -26,7 +27,14 @@ class TestSystemdDaemonNotify < Test::Unit::TestCase
 
   def test_ready
     assert_socket('READY=1') {
-      SystemdDaemon::Notify.ready
+      assert SystemdDaemon::Notify.ready > 0
+    }
+  end
+
+  def test_unset_env
+    assert_socket('READY=1') {
+      assert SystemdDaemon::Notify.ready(true) > 0
+      assert_equal 0, SystemdDaemon::Notify.ready
     }
   end
 
