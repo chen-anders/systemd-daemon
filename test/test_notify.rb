@@ -3,7 +3,7 @@ require 'socket'
 
 class TestSystemdDaemonNotify < Test::Unit::TestCase
 
-  def with_socket(expected_data)
+  def assert_socket(expected_data, msg=nil)
     notify_socket = "@test-systemd-daemon-#{$$}"
     ENV['NOTIFY_SOCKET'] = notify_socket
     s = Socket.new(:UNIX, :DGRAM, 0)
@@ -11,7 +11,7 @@ class TestSystemdDaemonNotify < Test::Unit::TestCase
 
     yield
 
-    s.recvmsg[0] == expected_data
+    assert_equal expected_data, s.recvmsg[0], msg
   ensure
     s.close
   end

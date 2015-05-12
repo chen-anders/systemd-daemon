@@ -11,7 +11,7 @@ static VALUE _sd_notify(VALUE mod, VALUE unset_env, VALUE state)
   int return_code;
 
   sd_state = StringValuePtr(state);
-  return_code = sd_notify(0, sd_state);
+  return_code = sd_notify(FIX2INT(unset_env), sd_state);
 
   return INT2FIX(return_code);
 }
